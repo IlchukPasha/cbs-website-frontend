@@ -36,6 +36,11 @@ const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
 
+// my components
+const SermonForm = React.lazy(() => import('./views/Sermons/SermonForm'));
+const EventForm = React.lazy(() => import('./views/Events/EventForm'));
+const UserForm = React.lazy(() => import('./views/Users/UserForm'));
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -79,6 +84,11 @@ const routes = [
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
+
+  // my routes
+  { path: '/sermon-form', exact: true,  name: 'Sermon Form', component: SermonForm },
+  { path: '/event-form', exact: true, name: 'Event Form', component: EventForm },
+  { path: '/user-form', exact: true, name: 'User Form', component: UserForm },
 ];
 
 export default routes;

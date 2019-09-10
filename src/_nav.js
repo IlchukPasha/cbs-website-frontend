@@ -18,12 +18,12 @@ export default {
     //   }
     // },
     {
-      name: 'Forms',
+      name: 'Проповіді',
       url: '/base/forms',
       // icon: 'icon-puzzle'
     },
     {
-      name: 'Tables',
+      name: 'Події',
       url: '/base/tables',
       // icon: 'icon-puzzle'
     },

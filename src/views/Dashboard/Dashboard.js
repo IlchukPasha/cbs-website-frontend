@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Badge,
   Card,
@@ -63,7 +64,7 @@ class Dashboard extends Component {
 
   btnClick(event) {
     console.log(+event.currentTarget.value);
-    // this.setState({ page: +event.currentTarget.value });
+    // this.setState({ page: +event.currentTarget.value }); // TODO not work this way
     this.state.page = +event.currentTarget.value;
     console.log('this.state.page1 ', this.state.page);
     this.getData();
@@ -87,30 +88,31 @@ class Dashboard extends Component {
     );
 
     const totalPages = Math.ceil(this.state.total / this.state.perPage);
-    const paginationItems2 = [];
+    const paginationItems = [];
     for (let i = 1; i <= totalPages; i++) {
       if (i === this.state.page) {
-        paginationItems2.push(
+        paginationItems.push(
           <PaginationItem active onClick={this.btnClick} value={i}>
             <PaginationLink tag="button">{i}</PaginationLink>
           </PaginationItem>
         );
       } else {
-        paginationItems2.push(
+        paginationItems.push(
           <PaginationItem onClick={this.btnClick} value={i}>
             <PaginationLink tag="button">{i}</PaginationLink>
           </PaginationItem>
         );
       }
     }
-    const paginationItems = <Pagination>
+    const paginations = <Pagination>
       {/*<PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>*/}
-      {paginationItems2}
+      {paginationItems}
       {/*<PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>*/}
     </Pagination>;
 
     return (
       <div className="animated fadeIn">
+        {/*<Link to="/user-form" className="nav-link">Створити користувача</Link>*/}
         <Row>
           <Col>
             <Card>
@@ -132,7 +134,7 @@ class Dashboard extends Component {
                   {userList}
                   </tbody>
                 </Table>
-                {paginationItems}
+                {paginations}
               </CardBody>
             </Card>
           </Col>
