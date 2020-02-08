@@ -7,41 +7,41 @@ import {
   CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
+  // Collapse,
+  // DropdownItem,
+  // DropdownMenu,
+  // DropdownToggle,
+  // Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
+  // FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButtonDropdown,
-  InputGroupText,
+  // InputGroup,
+  // InputGroupAddon,
+  // InputGroupButtonDropdown,
+  // InputGroupText,
   Label,
   Row,
-  Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink
+  // Table,
+  // Pagination,
+  // PaginationItem,
+  // PaginationLink
 } from 'reactstrap';
-import moment from 'moment';
+// import moment from 'moment';
 
 class UserForm extends Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    // this.toggle = this.toggle.bind(this);
-    // this.toggleFade = this.toggleFade.bind(this);
-    // this.state = {
-    //   collapse: true,
-    //   fadeIn: true,
-    //   timeout: 300
-    // };
-  }
+  //   // this.toggle = this.toggle.bind(this);
+  //   // this.toggleFade = this.toggleFade.bind(this);
+  //   // this.state = {
+  //   //   collapse: true,
+  //   //   fadeIn: true,
+  //   //   timeout: 300
+  //   // };
+  // }
 
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 

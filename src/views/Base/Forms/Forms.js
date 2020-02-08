@@ -2,28 +2,28 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
-  Badge,
-  Button,
+  // Badge,
+  // Button,
   Card,
   CardBody,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
-  Form,
-  FormGroup,
-  FormText,
-  FormFeedback,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButtonDropdown,
-  InputGroupText,
-  Label,
+  // Collapse,
+  // DropdownItem,
+  // DropdownMenu,
+  // DropdownToggle,
+  // Fade,
+  // Form,
+  // FormGroup,
+  // FormText,
+  // FormFeedback,
+  // Input,
+  // InputGroup,
+  // InputGroupAddon,
+  // InputGroupButtonDropdown,
+  // InputGroupText,
+  // Label,
   Row,
   Table,
   Pagination,
@@ -58,7 +58,7 @@ class Forms extends Component {
     let data = await fetch(`/api/admin/sermons?page=${this.state.page}&perPage=${this.state.perPage}`, {
       method: 'GET',
       headers: {
-        'x-api-token': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJmaXJzdE5hbWUiOiJBZG1pbiBGaXJzdCBOYW1lIn0sImlhdCI6MTU2NTcwMjU1MSwiZXhwIjoxNTcwODg2NTUxfQ.33C6P_5KwPiYFoYfMRu9os-jcA4dvkWYdEL60EnspiY',
+        'x-api-token': window.localStorage.getItem('jwt'),
         'Content-Type': 'application/json'
       }
     });
@@ -87,7 +87,7 @@ class Forms extends Component {
   // }
 
   render() {
-    const sermonList = this.state.sermons.map((item) =>
+    const sermonList = this.state.sermons && this.state.sermons.map((item) =>
       <tr key={item.id}>
         <td>{item.title}</td>
         <td>{item.subject}</td>

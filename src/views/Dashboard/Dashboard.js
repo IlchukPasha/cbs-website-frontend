@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+// import { Link } from 'react-router-dom';
 import {
-  Badge,
+  // Badge,
   Card,
   CardBody,
   CardHeader,
@@ -11,9 +11,8 @@ import {
   PaginationLink,
   Row,
   Table
-} from 'reactstrap';
-import axios from 'axios';
-
+} from "reactstrap";
+// import axios from 'axios';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -34,7 +33,7 @@ class Dashboard extends Component {
   //   fetch(`/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`, {
   //     method: 'GET',
   //     headers: {
-  //       'x-api-token': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJmaXJzdE5hbWUiOiJBZG1pbiBGaXJzdCBOYW1lIn0sImlhdCI6MTU2NTcwMjU1MSwiZXhwIjoxNTcwODg2NTUxfQ.33C6P_5KwPiYFoYfMRu9os-jcA4dvkWYdEL60EnspiY',
+  //       'x-api-token': window.localStorage.getItem('jwt'),
   //       'Content-Type': 'application/json'
   //     }
   //   }).then(res => res.json())
@@ -50,65 +49,65 @@ class Dashboard extends Component {
   // }
 
   async getData() {
-    console.log('this.state.page2 ', this.state.page);
-    let data = await fetch(`/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`, {
-      method: 'GET',
-      headers: {
-        'x-api-token': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJmaXJzdE5hbWUiOiJBZG1pbiBGaXJzdCBOYW1lIn0sImlhdCI6MTU2NTcwMjU1MSwiZXhwIjoxNTcwODg2NTUxfQ.33C6P_5KwPiYFoYfMRu9os-jcA4dvkWYdEL60EnspiY',
-        'Content-Type': 'application/json'
+    let data = await fetch(
+      `/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`,
+      {
+        method: "GET",
+        headers: {
+          "x-api-token": window.localStorage.getItem("jwt"),
+          "Content-Type": "application/json"
+        }
       }
-    });
+    );
     data = await data.json();
     this.setState({ users: data.results, total: data.total });
   }
 
   btnClick(event) {
-    console.log(+event.currentTarget.value);
-    // this.setState({ page: +event.currentTarget.value }); // TODO not work this way
-    this.state.page = +event.currentTarget.value;
-    console.log('this.state.page1 ', this.state.page);
-    this.getData();
+    // this not work because setState run async https://upmostly.com/tutorials/how-to-use-the-setstate-callback-in-react
+    // this.setState({ page: +event.currentTarget.value });
+    // this.getData();
+
+    // this.setState((prevState, props) => ({
+    //   page: +event.currentTarget.value
+    // }));
+
+    this.setState({ page: +event.currentTarget.value }, this.getData);
   }
 
   componentDidMount() {
     this.getData();
   }
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
+  loading = () => (
+    <div className="animated fadeIn pt-1 text-center">Loading...</div>
+  );
 
   render() {
-    const userList = this.state.users.map((item) =>
-      <tr key={item.id}>
-        <td>{item.firstName}</td>
-        <td>{item.lastName}</td>
-        <td>{item.email}</td>
-        <td>{item.createdAt}</td>
-        <td>{item.role}</td>
-      </tr>
-    );
-
     const totalPages = Math.ceil(this.state.total / this.state.perPage);
     const paginationItems = [];
     for (let i = 1; i <= totalPages; i++) {
       if (i === this.state.page) {
         paginationItems.push(
-          <PaginationItem active onClick={this.btnClick} value={i}>
+          <PaginationItem key={i} active onClick={this.btnClick} value={i}>
             <PaginationLink tag="button">{i}</PaginationLink>
           </PaginationItem>
         );
       } else {
         paginationItems.push(
-          <PaginationItem onClick={this.btnClick} value={i}>
+          <PaginationItem key={i} onClick={this.btnClick} value={i}>
             <PaginationLink tag="button">{i}</PaginationLink>
           </PaginationItem>
         );
       }
     }
-    const paginations = <Pagination>
-      {/*<PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>*/}
-      {paginationItems}
-      {/*<PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>*/}
-    </Pagination>;
+    const paginations = (
+      <Pagination>
+        {/*<PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>*/}
+        {paginationItems}
+        {/*<PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>*/}
+      </Pagination>
+    );
 
     return (
       <div className="animated fadeIn">
@@ -122,16 +121,25 @@ class Dashboard extends Component {
               <CardBody>
                 <Table responsive bordered>
                   <thead>
-                  <tr>
-                    <th>Імя</th>
-                    <th>Прізвище</th>
-                    <th>Емейл</th>
-                    <th>Дата створення</th>
-                    <th>Роль</th>
-                  </tr>
+                    <tr>
+                      <th>Імя</th>
+                      <th>Прізвище</th>
+                      <th>Емейл</th>
+                      <th>Дата створення</th>
+                      <th>Роль</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  {userList}
+                    {this.state.users &&
+                      this.state.users.map(item => (
+                        <tr key={item.id}>
+                          <td>{item.firstName}</td>
+                          <td>{item.lastName}</td>
+                          <td>{item.email}</td>
+                          <td>{item.createdAt}</td>
+                          <td>{item.role}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
                 {paginations}

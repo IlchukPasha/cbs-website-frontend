@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import moment from 'moment';
 
 class Tables extends Component {
@@ -22,7 +22,7 @@ class Tables extends Component {
     let data = await fetch(`/api/admin/events?page=${this.state.page}&perPage=${this.state.perPage}`, {
       method: 'GET',
       headers: {
-        'x-api-token': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJmaXJzdE5hbWUiOiJBZG1pbiBGaXJzdCBOYW1lIn0sImlhdCI6MTU2NTcwMjU1MSwiZXhwIjoxNTcwODg2NTUxfQ.33C6P_5KwPiYFoYfMRu9os-jcA4dvkWYdEL60EnspiY',
+        'x-api-token': window.localStorage.getItem('jwt'),
         'Content-Type': 'application/json'
       }
     });
@@ -44,7 +44,7 @@ class Tables extends Component {
 
   render() {
 
-    const eventList = this.state.events.map((item) =>
+    const eventList = this.state.events && this.state.events.map((item) =>
       <tr key={item.id}>
         <td>{item.title}</td>
         <td>{item.address}</td>

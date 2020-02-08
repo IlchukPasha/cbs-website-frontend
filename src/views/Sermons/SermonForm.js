@@ -1,86 +1,156 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import RichTextEditor from "react-rte";
 import {
-  Badge,
+  // Badge,
   Button,
   Card,
   CardBody,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   Col,
-  Collapse,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Fade,
+  // Collapse,
+  // DropdownItem,
+  // DropdownMenu,
+  // DropdownToggle,
+  // Fade,
   Form,
   FormGroup,
   FormText,
-  FormFeedback,
+  // FormFeedback,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButtonDropdown,
-  InputGroupText,
+  // InputGroup,
+  // InputGroupAddon,
+  // InputGroupButtonDropdown,
+  // InputGroupText,
   Label,
-  Row,
-  Table,
-  Pagination,
-  PaginationItem,
-  PaginationLink
-} from 'reactstrap';
-import moment from 'moment';
+  Row
+  // Table,
+  // Pagination,
+  // PaginationItem,
+  // PaginationLink
+} from "reactstrap";
+// import moment from 'moment';
+
+const validDateRegex = RegExp(/^\d{4}-\d{2}-\d{2}$/);
 
 class SermonForm extends Component {
   constructor(props) {
     super(props);
 
-    // this.toggle = this.toggle.bind(this);
-    // this.toggleFade = this.toggleFade.bind(this);
-    // this.state = {
-    //   collapse: true,
-    //   fadeIn: true,
-    //   timeout: 300
-    // };
+    this.state = {
+      title: "",
+      subject: "",
+      speaker: "",
+      text: RichTextEditor.createEmptyValue(),
+      date: null,
+      errors: {
+        title: "Назва мусить бути мінімум 3, максимум 50 символів!",
+        subject: "Тема мусить бути мінімум 3, максимум 50 символів!",
+        speaker: "Проповідник мусить бути мінімум 3, максимум 50 символів!",
+        text: "Текст мусить бути мінімум 10, максимум 30000 символів!",
+        date: "Невалідна дата!"
+      },
+      createBtnDisabled: true
+    };
 
     this.createSermon = this.createSermon.bind(this);
     this.submitCreateBtn = this.submitCreateBtn.bind(this);
   }
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
+  loading = () => (
+    <div className="animated fadeIn pt-1 text-center">Loading...</div>
+  );
 
-  // toggle() {
-  //   this.setState({ collapse: !this.state.collapse });
-  // }
-  //
-  // toggleFade() {
-  //   this.setState((prevState) => { return { fadeIn: !prevState }});
-  // }
+  handleChange = event => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+    let createBtnDisabled = this.state.createBtnDisabled;
+
+    switch (name) {
+      case "title":
+        const invalid = value.length < 3 || value.length > 50;
+        if (invalid) {
+          errors.title = "Назва мусить бути мінімум 3, максимум 50 символів!";
+        } else {
+          errors.title = "";
+        }
+        break;
+      case "subject":
+        errors.subject =
+          value.length < 3 || value.length > 50
+            ? "Тема мусить бути мінімум 3, максимум 50 символів!"
+            : "";
+        break;
+      case "speaker":
+        errors.speaker =
+          value.length < 3 || value.length > 50
+            ? "Проповідник мусить бути мінімум 3, максимум 50 символів!"
+            : "";
+        break;
+      case "date":
+        errors.date = validDateRegex.test(value) ? "" : "Невалідна дата!";
+        break;
+      default:
+        break;
+    }
+
+    createBtnDisabled = !(
+      errors.title.length === 0 &&
+      errors.subject.length === 0 &&
+      errors.speaker.length === 0 &&
+      errors.text.length === 0 &&
+      errors.date.length === 0
+    );
+
+    this.setState({ errors, createBtnDisabled, [name]: value });
+  };
+
+  handleTextChange = value => {
+    let errors = this.state.errors;
+    let createBtnDisabled = this.state.createBtnDisabled;
+    const valueConverted = value.toString('markdown');
+
+    errors.text =
+      valueConverted.length < 10 || valueConverted.length > 30000
+        ? "Текст мусить бути мінімум 10, максимум 30000 символів!"
+        : "";
+
+    createBtnDisabled = !(
+      errors.title.length === 0 &&
+      errors.subject.length === 0 &&
+      errors.speaker.length === 0 &&
+      errors.text.length === 0 &&
+      errors.date.length === 0
+    );
+
+    this.setState({ errors, createBtnDisabled, text: value });
+  };
 
   async createSermon(data) {
     fetch(`/api/admin/sermons`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'x-api-token': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJmaXJzdE5hbWUiOiJBZG1pbiBGaXJzdCBOYW1lIn0sImlhdCI6MTU2NTcwMjU1MSwiZXhwIjoxNTcwODg2NTUxfQ.33C6P_5KwPiYFoYfMRu9os-jcA4dvkWYdEL60EnspiY',
-        'Content-Type': 'application/json'
+        "x-api-token": window.localStorage.getItem("jwt"),
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
     }).then(res => {
-      console.log('res.status ', res.status);
       if (res.status === 201) {
-        window.location.href = '#/base/forms';
+        window.location.href = "#/sermons";
       }
     });
   }
 
   submitCreateBtn(event) {
     event.preventDefault();
-    const data = new FormData(event.target);
+    const { title, subject, speaker, text, date } = this.state;
     this.createSermon({
-      title: data.get('title'),
-      subject: data.get('subject'),
-      speaker: data.get('speaker'),
-      text: data.get('sermon-text'),
-      date: data.get('date')
+      title,
+      subject,
+      speaker,
+      text: text.toString("html"),
+      date
     });
   }
 
@@ -94,14 +164,23 @@ class SermonForm extends Component {
                 <strong>Створити проповідь</strong>
               </CardHeader>
               <CardBody>
-                <Form className="form-horizontal" onSubmit={this.submitCreateBtn}>
+                <Form
+                  className="form-horizontal"
+                  onSubmit={this.submitCreateBtn}
+                >
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="text-input">Назва</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="title-input" name="title" placeholder="Text"/>
-                      {/*<FormText color="muted">This is a help text</FormText>*/}
+                      <Input
+                        type="text"
+                        id="title-input"
+                        name="title"
+                        placeholder="Текст"
+                        onChange={this.handleChange}
+                      />
+                      <FormText color="red">{this.state.errors.title}</FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
@@ -109,7 +188,16 @@ class SermonForm extends Component {
                       <Label htmlFor="text-input">Тема</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="subject-input" name="subject" placeholder="Text"/>
+                      <Input
+                        type="text"
+                        id="subject-input"
+                        name="subject"
+                        placeholder="Текст"
+                        onChange={this.handleChange}
+                      />
+                      <FormText color="red">
+                        {this.state.errors.subject}
+                      </FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
@@ -117,7 +205,16 @@ class SermonForm extends Component {
                       <Label htmlFor="text-input">Проповідник</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="speaker-input" name="speaker" placeholder="Text"/>
+                      <Input
+                        type="text"
+                        id="speaker-input"
+                        name="speaker"
+                        placeholder="Текст"
+                        onChange={this.handleChange}
+                      />
+                      <FormText color="red">
+                        {this.state.errors.speaker}
+                      </FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
@@ -125,7 +222,14 @@ class SermonForm extends Component {
                       <Label htmlFor="date-input">Дата</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="date" id="date-input" name="date" placeholder="date"/>
+                      <Input
+                        type="date"
+                        id="date-input"
+                        name="date"
+                        placeholder="date"
+                        onChange={this.handleChange}
+                      />
+                      <FormText color="red">{this.state.errors.date}</FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
@@ -133,22 +237,25 @@ class SermonForm extends Component {
                       <Label htmlFor="textarea-input">Проповідь</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="textarea" name="sermon-text" id="textarea-sermon-text" rows="9"
-                             placeholder="Content..."/>
+                      <RichTextEditor
+                        value={this.state.text}
+                        onChange={this.handleTextChange}
+                      />
+                      <FormText color="red">{this.state.errors.text}</FormText>
+                      {/* <Input type="textarea" name="sermon-text" id="textarea-sermon-text" rows="9"
+                             placeholder="Content..."/> */}
                     </Col>
                   </FormGroup>
-                  <Button size="sm" color="primary">
-                    {/*<i className="fa fa-dot-circle-o"></i>*/}
+                  <Button
+                    size="sm"
+                    color="primary"
+                    disabled={this.state.createBtnDisabled}
+                  >
+                    {/* <i className="fa fa-dot-circle-o"></i> */}
                     Створити
                   </Button>
                 </Form>
               </CardBody>
-              <CardFooter>
-                <Button size="sm" color="primary">
-                  {/*<i className="fa fa-dot-circle-o"></i>*/}
-                  Створити
-                </Button>
-              </CardFooter>
             </Card>
           </Col>
         </Row>

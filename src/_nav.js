@@ -3,7 +3,7 @@ export default {
     {
       name: 'Головна',
       url: '/dashboard',
-      // icon: 'icon-speedometer',
+      icon: 'icon-home',
       // badge: {
       //   variant: 'info',
       //   text: 'NEW'
@@ -19,13 +19,13 @@ export default {
     // },
     {
       name: 'Проповіді',
-      url: '/base/forms',
-      // icon: 'icon-puzzle'
+      url: '/sermons',
+      icon: 'icon-speech'
     },
     {
       name: 'Події',
-      url: '/base/tables',
-      // icon: 'icon-puzzle'
+      url: '/events',
+      icon: 'icon-people'
     },
     // {
     //   name: 'Base',
@@ -109,18 +109,18 @@ export default {
     //     // }
     //   ]
     // },
-    {
-      divider: true
-    },
+    // {
+    //   divider: true
+    // },
     // {
     //   title: true,
     //   name: 'Extras'
     // },
-    {
-      name: 'Login',
-      url: '/login',
-      icon: 'icon-star'
-    },
+    // {
+    //   name: 'Login',
+    //   url: '/login',
+    //   icon: 'icon-star'
+    // },
     // {
     //   name: 'Pages',
     //   url: '/pages',
