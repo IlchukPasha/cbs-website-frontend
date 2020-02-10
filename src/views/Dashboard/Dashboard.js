@@ -20,7 +20,7 @@ class Dashboard extends Component {
 
     this.state = {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       users: [],
       total: 0
     };
@@ -30,7 +30,7 @@ class Dashboard extends Component {
   }
 
   // getData() {
-  //   fetch(`/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`, {
+  //   fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`, {
   //     method: 'GET',
   //     headers: {
   //       'x-api-token': window.localStorage.getItem('jwt'),
@@ -50,7 +50,7 @@ class Dashboard extends Component {
 
   async getData() {
     let data = await fetch(
-      `/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`,
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/users?page=${this.state.page}&perPage=${this.state.perPage}`,
       {
         method: "GET",
         headers: {
@@ -59,6 +59,7 @@ class Dashboard extends Component {
         }
       }
     );
+    console.log('data ', data);
     data = await data.json();
     this.setState({ users: data.results, total: data.total });
   }

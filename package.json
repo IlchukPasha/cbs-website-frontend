@@ -6,7 +6,6 @@
   "homepage": "https://cbs.com",
   "license": "MIT",
   "private": true,
-  "proxy": "http://localhost:9000",
   "repository": {
     "type": "git",
     "url": "git@github.com:IlchukPasha/cbs-website-frontend.git"

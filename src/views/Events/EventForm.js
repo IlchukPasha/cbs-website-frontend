@@ -144,7 +144,7 @@ class EventForm extends Component {
   };
 
   async createEvent(data) {
-    fetch(`/api/admin/events`, {
+    fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/events`, {
       method: "POST",
       headers: {
         "x-api-token": window.localStorage.getItem("jwt"),

@@ -19,7 +19,7 @@ class Sermons extends Component {
     super(props);
     this.state = {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       sermons: [],
       total: 0
     };
@@ -29,7 +29,7 @@ class Sermons extends Component {
   }
 
   async getData() {
-    let data = await fetch(`/api/admin/sermons?page=${this.state.page}&perPage=${this.state.perPage}`, {
+    let data = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/sermons?page=${this.state.page}&perPage=${this.state.perPage}`, {
       method: 'GET',
       headers: {
         'x-api-token': window.localStorage.getItem('jwt'),

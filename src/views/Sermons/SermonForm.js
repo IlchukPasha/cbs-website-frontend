@@ -128,7 +128,7 @@ class SermonForm extends Component {
   };
 
   async createSermon(data) {
-    fetch(`/api/admin/sermons`, {
+    fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/sermons`, {
       method: "POST",
       headers: {
         "x-api-token": window.localStorage.getItem("jwt"),

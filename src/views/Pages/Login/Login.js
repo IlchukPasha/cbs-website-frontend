@@ -11,7 +11,7 @@ class Login extends Component {
   }
 
   async login(data) {
-    fetch(`/api/admin/login`, {
+    fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

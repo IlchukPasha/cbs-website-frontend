@@ -19,7 +19,7 @@ class Tables extends Component {
   }
 
   async getData() {
-    let data = await fetch(`/api/admin/events?page=${this.state.page}&perPage=${this.state.perPage}`, {
+    let data = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/admin/events?page=${this.state.page}&perPage=${this.state.perPage}`, {
       method: 'GET',
       headers: {
         'x-api-token': window.localStorage.getItem('jwt'),
